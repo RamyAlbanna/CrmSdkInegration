@@ -9,7 +9,7 @@ namespace CrmSdkInegration
         private readonly CrmServiceClient svc;
         public CrmSdk()
         {
-            this.svc = Helper.CreateServiceClient();
+            this.svc = Helper.CreateServiceClient(false);
         }
 
         public Guid CreateContactAndBindWithAccount(Guid accountId)

@@ -16,7 +16,7 @@ namespace CrmSdkInegration
 
             HttpClient authenticatedClient = new HttpClient(Helper.GetClientHandler());
 
-            HttpResponseMessage response = await authenticatedClient.PostAsync($"{Helper.BaseCRMApiUrl}/{entitySetName}", content);
+            HttpResponseMessage response = await authenticatedClient.PostAsync($"{Helper.BaseCRMApiPremisesUrl}/{entitySetName}", content);
 
             if (response.IsSuccessStatusCode)
             {
@@ -34,7 +34,7 @@ namespace CrmSdkInegration
         {
             HttpClient client = new HttpClient(Helper.GetClientHandler());
 
-            string url = $"{Helper.BaseCRMApiUrl}/contacts({contactId})";
+            string url = $"{Helper.BaseCRMApiPremisesUrl}/contacts({contactId})";
             HttpRequestMessage request = new HttpRequestMessage(new HttpMethod("patch"), url)
             {
                 Content = new StringContent(jsonObject, Encoding.UTF8, "application/json")

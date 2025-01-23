@@ -1,49 +1,20 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace CrmSdkInegration
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            IntegrateUsingSdk();
-        }
-
-        public static void IntegrateUsingSdk()
-        {
-            CrmSdk crmSdk = new CrmSdk();
-            Guid accountId = crmSdk.CreateAccount();
-            crmSdk.CreateContactAndBindWithAccount(accountId);
-        }
-
-        public static async Task IntegrateUsingHttpClient()
-        {
-            var accountData = new
-            {
-                name = "Elbanna Account",
-                telephone1 = "01033842262",
-                address1_city = "Alexandria",
-                address1_country = "Egypt"
-            };
-
-            var contactData = new
-            {
-                firstname = "Donia",
-                lastname = "Elmalky",
-            };
-
-            var accountId = await CrmHttpClient.CreateEntityAsync("accounts", accountData);
-            var contactId = await CrmHttpClient.CreateEntityAsync ("contacts", contactData);
-
-            JObject jprimaryContact = new JObject
-            {
-                { "parentcustomerid_account@odata.bind", $"/accounts({accountId})" }
-            };
-
-
-            await CrmHttpClient.UpdateContactAsync(jprimaryContact.ToString(), contactId);
+            CreateRandomAccounts createRandomAccounts = new CreateRandomAccounts();
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            createRandomAccounts.CreateAccountsOnSingleThread(10000);
+            //createRandomAccounts.CreateAccountsInBatchesWithOneTransaction(10000,1000);
+            //createRandomAccounts.CreateAccountsInBatches(10000, 1000);
+            //createRandomAccounts.CreateAccountsInParallel(10000);
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds.ToString());
         }
     }
 }
